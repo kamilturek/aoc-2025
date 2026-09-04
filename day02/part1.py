@@ -12,23 +12,22 @@ def solve(input):
     result = 0
 
     for range_ in ranges:
-        invalid_ids = set()
         lower, upper = map(int, range_.split("-"))
 
-        for seed in map(str, (lower, upper)):
-            sequence = seed[: max(len(seed) // 2, 1)]
-            candidate = int(sequence + sequence)
-
-            while candidate <= upper:
-                if lower <= candidate <= upper:
-                    invalid_ids.add(candidate)
-
-                sequence = str(int(sequence) + 1)
-                candidate = int(sequence + sequence)
-
-        result += sum(invalid_ids)
+        for number in range(lower, upper + 1):
+            if is_invalid(number):
+                result += number
 
     return result
+
+
+def is_invalid(number):
+    number = str(number)
+
+    return (
+        len(number) % 2 == 0
+        and number[: len(number) // 2] == number[len(number) // 2 :]
+    )
 
 
 if __name__ == "__main__":

@@ -12,30 +12,23 @@ def solve(input):
     result = 0
 
     for range_ in ranges:
-        invalid_ids = set()
         lower, upper = map(int, range_.split("-"))
 
-        for seed in map(str, (lower, upper)): # do we really need both seeds?
-            for size in range(1, len(seed)):
-                sequence = seed[:size]
-                multiplier = 2
-                candidate = int(sequence * multiplier)
+        for number in range(lower, upper + 1):
+            number = str(number)
 
-                while candidate <= upper:
-                    inner_candidate = candidate
-                    inner_sequence = sequence
+            for seq_size in range(1, len(number) // 2 + 1):
+                if len(number) % seq_size != 0:
+                    continue
 
-                    while inner_candidate <= upper:
-                        if lower <= inner_candidate <= upper:
-                            invalid_ids.add(inner_candidate)
+                seq = number[:seq_size]
 
-                        inner_sequence = str(int(inner_sequence) + 1)
-                        inner_candidate = int(inner_sequence * multiplier)
-
-                    multiplier += 1
-                    candidate = int(sequence * multiplier)
-
-        result += sum(invalid_ids)
+                for i in range(0, len(number), seq_size):
+                    if number[i : i + seq_size] != seq:
+                        break
+                else:
+                    result += int(number)
+                    break
 
     return result
 
